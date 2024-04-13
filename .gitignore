@@ -8,9 +8,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
-dist-ssr
-*.local
 
 # Editor directories and files
 .idea
@@ -26,4 +23,3 @@ release
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
-dist-electron
