@@ -1,0 +1,255 @@
+body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  h2 {
+    // color: #9aaac8;
+    color: #fafafa;
+    opacity: 0.9;
+    margin-bottom: 2em;
+
+  }
+
+
+  .appHeader {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: #282c34;
+    /* min-height: 100vh; */
+    font-size: calc(5px + 2vmin);
+    color: #fafafa;
+    margin: 0;
+    padding: 0;
+
+    .formContainer{
+      display: flex;
+      flex-direction: column;
+
+      .hostContainer {
+        display: flex;
+        flex: 1;
+        .hostInput {
+          display: flex;
+          flex: 3;
+          // width: 60%;
+          margin-bottom: 0.9em;
+          margin-right: 0.5em;
+        }
+
+        .portInput {
+          display: flex;
+          flex: 1;
+          width: auto;
+        }
+      }
+
+
+      .userInput {
+        margin-bottom: 0.9em;
+      }
+
+      .passInput {
+        margin-bottom: 0.9em;
+      }
+
+      .dbInput {
+        margin-bottom: 0.9em;
+      }
+    }
+
+  }
+}
+
+#inputAutorizarSenha {
+  margin-top: -1em;
+  margin-bottom: 1.5em;
+  padding: 0.6em;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  color: #3a4351;
+  text-align: center;
+  font-size: medium;
+  text-decoration: none;
+  outline: none;
+}
+
+#buttonAutorizarSenhaContainer {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#buttonConfirmarAutorizarSenha {
+  background-color: rgb(62, 123, 42);
+  border: 1px solid rgb(62, 123, 42);
+}
+
+#buttonConfirmarAutorizarSenha:hover {
+  background-color: rgb(71, 160, 41);
+  border: 1px solid rgb(71, 160, 41);
+}
+
+.homeRightSide {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 2em;
+
+  .homeRightSideContentBox {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #e0eef8a9;
+    background-color: #31353f;
+    border: 1px solid #3a4351;
+    border-radius: 10px;
+  }
+}
+
+span {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1em;
+  max-height: min-content;
+}
+
+p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.SaveButtonContainer {
+  text-decoration: none;
+  outline: none;
+  margin: 0em 2em 0em 0em;
+}
+
+.ConnectButtonContainer {
+  text-decoration: none;
+  outline: none;
+  margin: 0em 0em 0em 0em;
+}
+
+.MostrarButtonContainer {
+  text-decoration: none;
+  outline: none;
+  margin: 0em 0em 0em 0em;
+  margin-left: 1.5em;
+}
+
+
+//INTERNAL CLASS
+.modalOverlay {
+  background-color: #505764a0;
+  backdrop-filter: blur(8px);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+//INTERNAL CLASS
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
+//INTERNAL CLASS
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+//INTERNAL CLASS
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  max-width: 700px;
+  background-color: #eaeaea;
+  padding: 20px;
+  border-radius: 10px;
+  outline: none;
+  box-shadow: 12px 14px 38px -7px rgba(0, 0, 0, 0.38);
+  max-height: 50vh;
+  text-transform: uppercase;
+
+  cursor: default;
+  transition: 0.3s;
+
+  h2 {
+      text-align: center;
+      color: #313131;
+      // opacity: 0.9;
+      max-height: 40px;
+      margin-bottom: 1.2em;
+      margin-top: 0;
+  }
+
+  p {
+      font-size: 14px;
+      text-align: center;
+      color: #313131;
+      opacity: 0.8;
+      max-height: 40px;
+      margin: -12px 0px 23px 0px;
+  }
+
+  button {
+    opacity: 1;
+    font-size: calc(5px + 2vmin);
+    padding: 0.8em 3em;
+    border-radius: 10px;
+    border: 1px solid #67727a;
+    background-color: #67727a;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover {
+    border: 1px solid #748189;
+    background-color: #748189;
+    transition: 0.3s;
+    opacity: 1;
+  }
+}
+
+// .modalOpened {
+//   opacity: 1;
+//   // transition: 0.5s ease-out;
+// }
+
+// .modalClosed {
+//   opacity: 0;
+//   transition: 0.3s ease-out;
+// }

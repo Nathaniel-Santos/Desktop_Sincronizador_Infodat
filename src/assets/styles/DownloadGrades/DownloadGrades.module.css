@@ -1,0 +1,236 @@
+body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+.app h2 {
+  color: #9aaac8;
+  opacity: 0.4;
+  margin-bottom: 1em;
+  margin-top: -1em;
+  width: 100%;
+  text-align: center;
+}
+.app .appHeader {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: #282c34;
+  /* min-height: 100vh; */
+  font-size: calc(5px + 2vmin);
+  color: rgba(250, 250, 250, 0.5607843137);
+  margin: 0;
+  padding: 0;
+}
+.app .appHeader .checkContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50vw;
+  margin-bottom: 0.5em;
+  color: rgba(224, 238, 248, 0.662745098);
+  font-weight: bold;
+  background-color: #2d313a;
+  border: 1px solid #343B48;
+  border-radius: 5px;
+  padding: 0.6em 1em;
+}
+.app .appHeader .checkContainer .todasAsNotasRow {
+  display: flex;
+  align-items: center;
+}
+.app .appHeader .checkContainer .selectNotasConceito {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  width: 220px;
+}
+.app .appHeader .checkContainer .selectTipoNotas {
+  margin-bottom: 0.5em;
+  width: 220px;
+}
+.app .appHeader .checkContainer select,
+.app .appHeader .checkContainer option {
+  text-decoration: none;
+  outline: none;
+  padding: 0.5em;
+  color: white;
+  font-weight: bold;
+  background-color: #343946;
+  border: 2px solid #495d81;
+  border-radius: 5px;
+}
+.app .appHeader .checkContainer optgroup {
+  padding: 2em;
+}
+.app .appHeader .filtrarLabel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50vw;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+  font-size: 18px;
+}
+.app .appHeader .autoCompleteContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #2d313a;
+  border: 1px solid #343B48;
+  border-radius: 5px;
+  padding: 1em 1em 2em 1em;
+  color: rgba(224, 238, 248, 0.662745098);
+}
+.app .appHeader .autoCompleteContainer .autoComplete {
+  margin-bottom: 0.5em;
+  width: 50vw;
+}
+.app .appHeader .buttonsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.app .appHeader .formContainer {
+  display: flex;
+  flex-direction: column;
+}
+.app .appHeader .formContainer .hostContainer {
+  display: flex;
+  flex: 1;
+}
+.app .appHeader .formContainer .hostContainer .hostInput {
+  display: flex;
+  flex: 3;
+  margin-bottom: 0.9em;
+  margin-right: 0.5em;
+}
+.app .appHeader .formContainer .hostContainer .portInput {
+  display: flex;
+  flex: 1;
+  width: auto;
+}
+.app .appHeader .formContainer .userInput {
+  margin-bottom: 0.9em;
+}
+.app .appHeader .formContainer .passInput {
+  margin-bottom: 0.9em;
+}
+.app .appHeader .formContainer .dbInput {
+  margin-bottom: 0.9em;
+}
+.app .appHeader .checkContainerSelected {
+  background-color: #3d4352;
+  border: 1px solid #4b5567;
+  color: #e0eef8;
+  transition: 0.2s;
+}
+
+.homeRightSide {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.linkRedirect {
+  text-decoration: none;
+  outline: none;
+  margin-left: 2em;
+}
+
+.modalOverlay {
+  background-color: rgba(80, 87, 100, 0.6274509804);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  max-width: 700px;
+  background-color: #eaeaea;
+  padding: 20px;
+  border-radius: 10px;
+  outline: none;
+  box-shadow: 12px 14px 38px -7px rgba(0, 0, 0, 0.38);
+  max-height: 50vh;
+  text-transform: uppercase;
+  cursor: default;
+  transition: 0.3s;
+}
+.modalContent h2 {
+  text-align: center;
+  color: #313131;
+  max-height: 40px;
+  margin-bottom: 1.2em;
+  margin-top: 0;
+}
+.modalContent p {
+  font-size: 14px;
+  text-align: center;
+  color: #313131;
+  opacity: 0.8;
+  max-height: 40px;
+  margin: -12px 0px 23px 0px;
+}
+.modalContent button {
+  opacity: 1;
+  font-size: calc(5px + 2vmin);
+  padding: 0.8em 3em;
+  border-radius: 10px;
+  border: 1px solid #67727a;
+  background-color: #67727a;
+  color: white;
+  cursor: pointer;
+}
+.modalContent button:hover {
+  border: 1px solid #748189;
+  background-color: #748189;
+  transition: 0.3s;
+  opacity: 1;
+}/*# sourceMappingURL=DownloadGrades.module.css.map */

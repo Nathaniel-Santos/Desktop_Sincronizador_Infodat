@@ -1,0 +1,171 @@
+body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+.app h2 {
+  color: #fafafa;
+  opacity: 0.9;
+  margin-bottom: 2em;
+}
+.app .appHeader {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: #282c34;
+  /* min-height: 100vh; */
+  font-size: calc(5px + 2vmin);
+  color: #fafafa;
+  margin: 0;
+  padding: 0;
+}
+.app .appHeader .formContainer {
+  display: flex;
+  flex-direction: column;
+}
+.app .appHeader .formContainer .hostContainer {
+  display: flex;
+  flex: 1;
+}
+.app .appHeader .formContainer .hostContainer .hostInput {
+  display: flex;
+  flex: 3;
+  margin-bottom: 0.9em;
+  margin-right: 0.5em;
+}
+.app .appHeader .formContainer .hostContainer .portInput {
+  display: flex;
+  flex: 1;
+  width: auto;
+}
+.app .appHeader .formContainer .userInput {
+  margin-bottom: 0.9em;
+}
+.app .appHeader .formContainer .passInput {
+  margin-bottom: 0.9em;
+}
+.app .appHeader .formContainer .dbInput {
+  margin-bottom: 0.9em;
+}
+
+.homeRightSide {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 2em;
+}
+.homeRightSide .homeRightSideContentBox {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: rgba(224, 238, 248, 0.662745098);
+  background-color: #31353f;
+  border: 1px solid #3a4351;
+  border-radius: 10px;
+}
+
+span {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1em;
+  max-height: -moz-min-content;
+  max-height: min-content;
+}
+
+p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalOverlay {
+  background-color: rgba(80, 87, 100, 0.6274509804);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  max-width: 700px;
+  background-color: #eaeaea;
+  padding: 20px;
+  border-radius: 10px;
+  outline: none;
+  box-shadow: 12px 14px 38px -7px rgba(0, 0, 0, 0.38);
+  max-height: 50vh;
+  text-transform: uppercase;
+  cursor: default;
+  transition: 0.3s;
+}
+.modalContent h2 {
+  text-align: center;
+  color: #313131;
+  max-height: 40px;
+  margin-bottom: 1.2em;
+  margin-top: 0;
+}
+.modalContent p {
+  font-size: 14px;
+  text-align: center;
+  color: #313131;
+  opacity: 0.8;
+  max-height: 40px;
+  margin: -12px 0px 23px 0px;
+}
+.modalContent button {
+  opacity: 1;
+  font-size: calc(5px + 2vmin);
+  padding: 0.8em 3em;
+  border-radius: 10px;
+  border: 1px solid #67727a;
+  background-color: #67727a;
+  color: white;
+  cursor: pointer;
+}
+.modalContent button:hover {
+  border: 1px solid #748189;
+  background-color: #748189;
+  transition: 0.3s;
+  opacity: 1;
+}/*# sourceMappingURL=settings.module.css.map */

@@ -1,0 +1,266 @@
+body {
+  overflow: hidden;
+  border: 1px solid #343B48;
+}
+
+.app {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.app .appHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #282c34;
+  min-height: 100vh;
+  font-size: calc(5px + 2vmin);
+  color: #fafafa;
+}
+.app .appHeader .leftSide {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  max-width: 50vw;
+  border-right: 1px solid #fafafa;
+  transition: 0.5s;
+  margin-top: -8vh;
+}
+.app .appHeader .leftSide h1 {
+  color: #fafafa;
+}
+.app .appHeader .leftSide img {
+  width: 125px;
+  height: 125px;
+  transition: 0.5s;
+}
+.app .appHeader .leftSide img:hover {
+  width: 145px;
+  height: 145px;
+  transition: 0.5s;
+}
+.app .appHeader .leftSide p {
+  font-size: 18px;
+  color: #fafafa;
+  opacity: 0.7;
+}
+.app .appHeader form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.app .appHeader .rightSide {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  max-width: 50vw;
+  height: 100vh;
+}
+.app .appHeader .rightSide .userContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 1.5em;
+}
+.app .appHeader .rightSide .userContainer label {
+  color: #ffffff;
+  opacity: 0.6;
+  font-size: small;
+  margin-bottom: -2.5em;
+  transition: 0.5s;
+}
+.app .appHeader .rightSide .userContainer label.userClass {
+  color: #fafafa;
+  opacity: 1;
+  font-size: medium;
+  margin-bottom: 0.5em;
+  transition: 0.5s;
+  margin-left: 8vw;
+}
+.app .appHeader .rightSide .userContainer:focus-within label {
+  color: #fafafa;
+  opacity: 1;
+  font-size: medium;
+  margin-bottom: 0.5em;
+  margin-left: 8vw;
+  transition: 0.5s;
+}
+.app .appHeader .rightSide .passContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+.app .appHeader .rightSide .passContainer label {
+  color: #ffffff;
+  opacity: 0.6;
+  font-size: small;
+  margin-bottom: -2.5em;
+  transition: 0.5s;
+}
+.app .appHeader .rightSide .passContainer label.passClass {
+  color: #fafafa;
+  opacity: 1;
+  font-size: medium;
+  margin-bottom: 0.5em;
+  transition: 0.5s;
+  margin-left: 8vw;
+  margin-top: -1em;
+}
+.app .appHeader .rightSide .passContainer:focus-within label {
+  color: #fafafa;
+  opacity: 1;
+  font-size: medium;
+  margin-bottom: 0.5em;
+  transition: 0.5s;
+  margin-left: 8vw;
+  margin-top: -1em;
+}
+.app .appHeader .rightSide label {
+  align-self: flex-start;
+  color: #fafafa;
+  opacity: 0.8;
+  font-size: small;
+  margin-bottom: 0.5em;
+  transition: 0.5s;
+  margin-left: 10vw;
+}
+.app .appHeader .rightSide p {
+  font-size: 12px;
+  color: #fafafa;
+  opacity: 0.7;
+}
+.app .appHeader .rightSide input {
+  padding: 1em;
+  margin-bottom: 1em;
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+  outline: none;
+  width: 65%;
+  transition: 0.5s;
+  background-color: rgb(120, 129, 142);
+  color: #fafafa;
+  font-size: 16px;
+}
+.app .appHeader .rightSide input:focus {
+  transition: 0.5s;
+  padding: 1em;
+  width: 65%;
+}
+.app .appHeader .rightSide button {
+  font-size: calc(5px + 2vmin);
+  margin: 2em 0em -4em 0em;
+  padding: 1em 3em;
+  border-radius: 10px;
+  border: 1px solid #376ba6;
+  background-color: #376ba6;
+  color: white;
+  cursor: pointer;
+}
+.app .appHeader .rightSide button:hover {
+  border: 1px solid #377ccb;
+  background-color: #377ccb;
+}
+.app .appHeader .rightSide a {
+  margin-top: 0.3em;
+  margin-bottom: -0.5em;
+}
+.app .appHeader .rightSide .appLink {
+  color: #61dafb;
+  font-size: medium;
+}
+
+.modalOverlay {
+  background-color: rgba(80, 87, 100, 0.6274509804);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  max-width: 700px;
+  background-color: #eaeaea;
+  padding: 20px;
+  border-radius: 10px;
+  outline: none;
+  box-shadow: 12px 14px 38px -7px rgba(0, 0, 0, 0.38);
+  max-height: 70vh;
+  text-transform: uppercase;
+  cursor: default;
+  transition: 0.3s;
+}
+.modalContent h2 {
+  text-align: center;
+  color: #313131;
+  max-height: 40px;
+  margin-bottom: 1.2em;
+  margin-top: 0;
+}
+.modalContent p {
+  font-size: 14px;
+  text-align: center;
+  color: #313131;
+  opacity: 0.8;
+  max-height: 40px;
+  margin: -12px 0px 23px 0px;
+}
+.modalContent button {
+  font-size: calc(5px + 2vmin);
+  padding: 0.8em 3em;
+  border-radius: 10px;
+  border: 1px solid #67727a;
+  background-color: #67727a;
+  color: white;
+  cursor: pointer;
+}
+.modalContent button:hover {
+  border: 1px solid #748189;
+  background-color: #748189;
+  transition: 0.3s;
+}
+
+.modalOpened {
+  opacity: 1;
+}
+
+.modalClosed {
+  opacity: 0;
+  transition: 0.3s ease-out;
+}/*# sourceMappingURL=app.module.css.map */

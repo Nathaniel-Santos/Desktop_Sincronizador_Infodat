@@ -1,0 +1,270 @@
+body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+.app h2 {
+  color: #9aaac8;
+  opacity: 0.4;
+  margin-bottom: 1em;
+  margin-top: -1em;
+  width: 100%;
+  text-align: center;
+}
+.app .appHeader {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: #282c34;
+  font-size: calc(5px + 2vmin);
+  color: rgba(250, 250, 250, 0.5607843137);
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  max-height: 20px;
+}
+table th {
+  font-weight: bold;
+  border: 1px solid rgba(40, 44, 52, 0.1803921569);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+table td {
+  font-size: medium;
+  padding: 0.2em 0.8em;
+  max-width: 5px;
+  border: 1px solid rgba(40, 44, 52, 0.1803921569);
+}
+
+.homeRightSide {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.homeRightSide .pesquisarMdbUpsateSiteContainer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1em;
+  margin-top: -1em;
+}
+.homeRightSide .pesquisarMdbUpsateSiteContainer .pesquisarMdbUpsateSiteField {
+  background-color: #282c34;
+  padding: 0;
+  height: 36px;
+  width: 35%;
+  padding: 0em 1.5em;
+  text-decoration: none;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid rgba(144, 202, 249, 0.5);
+  color: rgba(144, 202, 249, 0.5411764706);
+  font-size: small;
+}
+.homeRightSide .pesquisarMdbUpsateSiteContainer .pesquisarMdbUpsateSiteField:hover {
+  border: 1px solid rgb(144, 202, 249);
+  transition: 0.2s ease-in-out;
+}
+.homeRightSide .pesquisarMdbUpsateSiteContainer .pesquisarMdbUpsateSiteField::-moz-placeholder {
+  color: rgba(144, 202, 249, 0.5);
+}
+.homeRightSide .pesquisarMdbUpsateSiteContainer .pesquisarMdbUpsateSiteField::placeholder {
+  color: rgba(144, 202, 249, 0.5);
+}
+.homeRightSide .pesquisarMdbUpsateSiteContainer .pesquisarMdbUpsateSiteField:focus {
+  border: 1px solid rgb(144, 202, 249);
+  color: #90caf9;
+  transition: 0.2s ease-in-out;
+}
+.homeRightSide .pesquisarMdbUpsateSiteContainer .pesquisarMdbUpsateSiteButtonSearch {
+  margin-left: 1em;
+}
+@keyframes iconWifiOnGreenEffect {
+  from {
+    color: rgb(59, 193, 59);
+  }
+  50% {
+    color: rgb(5, 255, 1);
+  }
+  to {
+    color: rgb(59, 193, 59);
+  }
+}
+.homeRightSide .iconWifiOn {
+  margin-left: 0.2em;
+  color: rgb(5, 255, 1);
+  font-size: 32px;
+  opacity: 1;
+  animation-name: iconWifiOnGreenEffect;
+  animation-delay: 1s;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  transition: 0.5s ease-out;
+}
+.homeRightSide .connectarButtonContainer {
+  display: flex;
+  align-items: center;
+}
+.homeRightSide .connectarButtonContainer .wifiIcon {
+  margin-left: 0.2em;
+  color: rgb(5, 255, 1);
+  font-size: 32px;
+  opacity: 1;
+}
+.homeRightSide .tableContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  max-height: 50vh;
+  min-height: 50vh;
+  min-width: 52vw;
+  padding: 0 1em;
+  background-color: #2d313a;
+  border: 1px solid #343B48;
+  border-radius: 10px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.homeRightSide .tableContainer .tablesNameContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  max-height: 36px;
+  min-height: 36px;
+  padding: 0.2em 0em;
+  width: 100%;
+  border-top: 1px solid rgba(52, 59, 72, 0.4941176471);
+  border-bottom: 1px solid rgba(52, 59, 72, 0.4941176471);
+}
+.homeRightSide .tableContainer .tablesNameContainer:hover {
+  background-color: #343B48;
+  transition: 0.2s ease-in-out;
+}
+.homeRightSide .tableContainer .checkboxTableName {
+  width: 36px;
+  height: 36px;
+}
+.homeRightSide .tableContainer .tableName {
+  display: flex;
+  align-items: center;
+  color: white;
+  opacity: 0.9;
+  cursor: default;
+  height: 100%;
+  min-width: -moz-min-content;
+  min-width: min-content;
+  padding: 0 0.2em;
+  width: 100%;
+}
+.homeRightSide .buttonsUpdateSiteContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.linkRedirect {
+  text-decoration: none;
+  outline: none;
+  margin-left: 2em;
+}
+
+.modalOverlay {
+  background-color: rgba(80, 87, 100, 0.6274509804);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  max-width: 700px;
+  background-color: #eaeaea;
+  padding: 20px;
+  border-radius: 10px;
+  outline: none;
+  box-shadow: 12px 14px 38px -7px rgba(0, 0, 0, 0.38);
+  max-height: 50vh;
+  text-transform: uppercase;
+  cursor: default;
+  transition: 0.3s;
+}
+.modalContent h2 {
+  text-align: center;
+  color: #313131;
+  max-height: 40px;
+  margin-bottom: 1.2em;
+  margin-top: 0;
+}
+.modalContent p {
+  font-size: 14px;
+  text-align: center;
+  color: #313131;
+  opacity: 0.8;
+  max-height: 40px;
+  margin: -12px 0px 23px 0px;
+}
+.modalContent button {
+  opacity: 1;
+  font-size: calc(5px + 2vmin);
+  padding: 0.8em 3em;
+  border-radius: 10px;
+  border: 1px solid #67727a;
+  background-color: #67727a;
+  color: white;
+  cursor: pointer;
+}
+.modalContent button:hover {
+  border: 1px solid #748189;
+  background-color: #748189;
+  transition: 0.3s;
+  opacity: 1;
+}/*# sourceMappingURL=UpdateSite.module.css.map */

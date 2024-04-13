@@ -1,0 +1,47 @@
+.topBarContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 35px;
+  min-height: 35px;
+  background-color: #1B1D23;
+  color: #fafafa;
+  overflow-y: hidden;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #343B48;
+  flex: 1;
+  overflow: hidden;
+  z-index: 1;
+}
+.topBarContainer .topBarDragRegion {
+  display: flex;
+  flex: 4;
+  margin-left: 3vw;
+  font-size: small;
+  opacity: 0.9;
+  -webkit-app-region: drag;
+}
+.topBarContainer .topBarCommandsContainer {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+}
+.topBarContainer .topBarCommandsContainer .topBarIcon {
+  display: flex;
+  height: auto;
+  justify-content: center;
+  align-items: center;
+  background-color: #1B1D23;
+  cursor: pointer;
+  margin: 0;
+  padding: 0.3em 0.8em;
+  transition: 0.3s;
+  opacity: 0.8;
+}
+.topBarContainer .topBarCommandsContainer .topBarIcon:hover {
+  background-color: #4F9FEE;
+  opacity: 1;
+  transition: 0.3s;
+}/*# sourceMappingURL=TopBar.module.css.map */

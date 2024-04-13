@@ -1,0 +1,68 @@
+{
+  "name": "Sincronizador",
+  "productName": "Sincronizador",
+  "private": true,
+  "version": "2.1.0",
+  "description": "Sincronizador Diário Web",
+  "author": "Nathan Santos",
+  "license": "MIT",
+  "main": "dist-electron/electron/main/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && electron-builder",
+    "electron": "ELECTRON_DISABLE_SECURITY_WARNINGS=true electron ."
+  },
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@fontsource/roboto": "^4.5.8",
+    "@lottiefiles/react-lottie-player": "^3.4.7",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/material": "^5.10.11",
+    "@types/express": "^4.17.17",
+    "@types/mysql2": "github:types/mysql2",
+    "@types/node": "^20.1.1",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "@types/react-modal": "^3.13.1",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/sequelize": "^4.28.15",
+    "@vitejs/plugin-react": "^2.1.0",
+    "buffer": "^6.0.3",
+    "electron-vite": "^1.0.22",
+    "express": "^4.18.2",
+    "framer-motion": "^10.16.7",
+    "mdb-reader": "^2.2.6",
+    "mysql2": "^2.3.3",
+    "pg": "^8.10.0",
+    "pg-hstore": "^2.3.4",
+    "process": "^0.11.10",
+    "react-modal": "^3.16.1",
+    "react-router-dom": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "@types/react-modal": "^3.13.1",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react": "^2.1.0",
+    "electron": "^24.2.0",
+    "electron-builder": "^24.3.0",
+    "npm": "^10.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.55.0",
+    "typescript": "^4.8.4",
+    "vite": "^3.1.4",
+    "vite-electron-plugin": "^0.4.6",
+    "vite-plugin-electron-renderer": "^0.10.1"
+  },
+  "debug": {
+    "env": {
+      "VITE_DEV_SERVER_URL": "http://127.0.0.1:7777"
+    }
+  }
+}

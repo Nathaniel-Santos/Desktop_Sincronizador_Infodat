@@ -1,0 +1,140 @@
+.SideBar {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  /* min-height: 100vh; */
+  min-width: 170px;
+  max-width: 170px;
+  background-color: #272C36;
+  /* overflow: hidden; */
+  margin-right: 0px;
+  margin-top: 0px;
+  border-right: 1px solid #343B48;
+  padding-top: 1.5em;
+  padding-left: 0.2em;
+  text-decoration: none;
+  outline: none;
+}
+.SideBar .SideBarListContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.SideBar .SideBarListContainer header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3vh;
+  color: white;
+}
+.SideBar .SideBarListContainer header img {
+  display: flex;
+  align-self: center;
+}
+.SideBar .SideBarListContainer header .Escola {
+  font-weight: bold;
+  margin: 0.6em 0em 0.2em 0em;
+  text-transform: capitalize;
+  max-width: 120px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: calc(2px + 2vmin);
+  white-space: nowrap;
+}
+.SideBar .SideBarListContainer header .Cargo {
+  font-weight: lighter;
+  font-size: 10px;
+  opacity: 0.6;
+}
+.SideBar .SideBarListContainer header hr {
+  margin-top: 20px;
+  margin-bottom: -20px;
+  width: 65%;
+  opacity: 0.2;
+}
+.SideBar .SideBarListContainer .SideBarList {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 5vh;
+}
+.SideBar .SideBarListContainer .SideBarList .row {
+  width: 100%;
+  height: 60px;
+  list-style-type: none;
+  margin: 0%;
+  display: flex;
+  flex-direction: row;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  padding: 0em;
+  font-size: calc(5px + 2vmin);
+  text-decoration: none;
+}
+.SideBar .SideBarListContainer .SideBarList .row:hover {
+  cursor: pointer;
+  background-color: #4F9FEE;
+  transition: 0.3s;
+}
+.SideBar .SideBarListContainer .SideBarList .active {
+  background-color: rgba(16, 32, 49, 0.5568627451);
+}
+.SideBar .SideBarListContainer .SideBarList .icon {
+  flex: 30%;
+  display: grid;
+  place-content: center;
+}
+.SideBar .SideBarListContainer .SideBarList .title {
+  flex: 70%;
+  text-transform: uppercase;
+  font-size: calc(4px + 1vmin);
+}
+.SideBar .SairButtonSideBarAdmin {
+  display: flex;
+  background-color: #272C36;
+  flex: 1;
+  justify-content: flex-start;
+  align-items: center;
+  max-height: 120px;
+  text-decoration: none;
+  font-size: 12px;
+}
+.SideBar .SairButtonSideBarAdmin button {
+  display: flex;
+  background-color: #272C36;
+  flex: 1;
+  max-height: 50px;
+  min-height: 50px;
+  /* justify-content: space-between; */
+  align-items: center;
+  width: 100%;
+  border: none;
+  color: #fafafa;
+  outline: none;
+  font-weight: bold;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.SideBar .SairButtonSideBarAdmin button:hover {
+  background-color: #4F9FEE;
+}
+.SideBar .SairButtonSideBarAdmin .SideBarExitIcon {
+  margin-left: 0.2em;
+  margin-right: 0.4em;
+}
+.SideBar .VersionApp {
+  font-size: x-small;
+  color: #949AA7;
+  text-align: center;
+  margin: -2em 0 0.8em 0;
+  padding: 0;
+  opacity: 0.5;
+}/*# sourceMappingURL=SideBar.module.css.map */
