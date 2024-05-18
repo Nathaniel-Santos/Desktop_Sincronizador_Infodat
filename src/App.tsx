@@ -14,14 +14,23 @@ import UserOutLine from '../src/public/User-outline.json'
 import { Backdrop, CircularProgress } from '@mui/material'
 
 import GetStatusSchool from '@/services/GetStatusSchool';
+import GetEscolaAuth from './services/GetEscolaAuth'
 
-
+interface IDadosEscola {
+  db_host: string,
+  db_name: string,
+  db_user: string,
+  db_pass: string,
+  db_port: string | number,
+}
 
 const App: React.FC = () => {
   const [userValue, setUserValue] = useState('')
   const [passValue, setPassValue] = useState('')
   const [modalIsOpen, setIsOpen] = useState(false)
   const [connection, setConnection] = useState<any>(false)
+  const [connectionEscolas, setConnectionEscolas] = useState<any>(false)
+  const [dadosConnWebEscola, setDadosConnWebEscola] = useState<IDadosEscola>()
   const [status, setStatus] = useState<any>('')
   const [open, setOpen] = useState(false)
   const [msg, setMsg] = useState<string>('')
@@ -30,13 +39,13 @@ const App: React.FC = () => {
   const userRef = useRef<HTMLInputElement>(null)
   const passRef = useRef<HTMLInputElement>(null)
   const linkRef = useRef<any>(null)
+  let count = 0
   Modal.setAppElement('#root')
 
   useEffect(() => {
     //Criar arquivo de conexao
     ipcRenderer.send('create-conn-file')
     ipcRenderer.on('create-conn-file', (event, msg) => {
-      // console.log('create-conn-return', msg)
       if (msg === 'created') {
         setConnFileCreate(true)
       }
@@ -50,21 +59,17 @@ const App: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    if (connFileCreate) {
-      ipcRenderer.send('connection')
-
-      ipcRenderer.on('connection', (event, msg) => {
-        console.log('MsgConn', msg)
-        setConnection(
-          mysql.createPool({
-            host: msg.Host,
-            user: msg.User,
-            password: msg.Pass,
-            database: msg.Db,
-            port: msg.Port
-          })
-        )
-      })
+    if (connFileCreate && count === 0) {
+      count ++
+      setConnectionEscolas(
+        mysql.createPool({
+          host: 'mysql247.umbler.com',
+          user: 'escolas',
+          password: '(J76E|bD6n',
+          database: 'escolas',
+          port: '41890'
+        })
+      )
     }
   }, [connFileCreate])
 
@@ -73,12 +78,19 @@ const App: React.FC = () => {
       GetStatusSchool(connection)
         .then((result) => {
           setStatus(result[0].Status)
+          setTimeout(() => {
+            setOpen(!open)
+            linkRef?.current?.click()
+          }, 2000)
         })
         .catch((error) => {
+          openModal()
+          console.log('Senha incorreta')
           console.log('STATUS-RESULT', error)
         })
     }
   }, [connection])
+
 
   function openModal() {
     setIsOpen(!modalIsOpen);
@@ -92,45 +104,70 @@ const App: React.FC = () => {
     setOpen(!open)
   }
 
-  function onAuth(e) {
-    e.preventDefault()
-    console.log('STATUSAUTH', status)
-    ipcRenderer.send('config', { authStatus: 'Waiting' })
+  function onSaveCredentialsFile(host: string, db_name: string, user: string, pass: string, port: string | number, title: string) {
+    const msgSend = {
+      Host: host,
+      Db: db_name,
+      User: user,
+      Pass: pass,
+      Port: port,
+      Escola: title
+    }
 
-    ipcRenderer.on('credentials', (event, msg) => {
-      console.log('CREDENTIAL OK', msg)
-      const msgData = msg
-      setMsg(msgData)
+    const msgSendString = JSON.stringify(msgSend)
 
-      if (userValue === msgData.User && passValue === msgData.Pass) {
-        if (userValue === 'Infodat' && passValue === '22201034') {
-          closeModal()
-          setOpen(!open)
-          setTimeout(() => {
-            setOpen(!open)
-            linkRef?.current?.click()
-          }, 2000)
-        }
+    ipcRenderer.send('saveConn', msgSendString)
 
+    ipcRenderer.on('saveConn', (event, msg) => {
+      const result = msg
+      console.log('SaveConnReturn', result)
+
+      if (result.statusCode === 200) {
+        ipcRenderer.send('full-info-config-request', { authStatus: 'Waiting' })
+        ipcRenderer.send('notification', { title: 'INFODAT', body: 'Configuração salva com sucesso' })
       } else {
         openModal()
-        console.log('Senha incorreta')
+        alert('Não foi possível salvar as alterações')
+        // window.location.reload()
       }
     })
   }
 
-  ipcRenderer.on('credential_error', (event, msg) => {
-    const msgData = JSON.stringify(msg)
-    console.log('Credencial_error console', msg, `Type: ${typeof (msg)}`)
-    setMsg(v => v = msg)
+  const saveConnection = (host: string, db_name: string, user: string, pass: string, port: string | number) => {
+    if (host) {
+      setConnection(
+        mysql.createPool({
+          host: host,
+          user: user,
+          password: pass,
+          database: db_name,
+          port: port
+        })
+      )
+      return 'connectado'
+    } else {
+      return 'erro'
+    }
+  }
 
-    closeModal()
-    setOpen(!open)
-    setTimeout(() => {
-      setOpen(!open)
-      // linkRef?.current?.click()
-    }, 2000)
-  })
+  async function onAuth(e: any) {
+    e.preventDefault()
+
+    const escolaAuth = await GetEscolaAuth(connectionEscolas, userValue, passValue)
+
+    if (escolaAuth) {
+      setOpen(true)
+
+      const { db_host, db_name, db_pass, db_port, db_user }: IDadosEscola = escolaAuth
+      console.log(db_host, db_name, db_pass, db_port, db_user)
+
+      const conectado = saveConnection(db_host, db_name, db_user, db_pass, db_port)
+      conectado === 'connectado' ? onSaveCredentialsFile(db_host, db_name, db_user, db_pass, db_port, userValue) : null
+
+    } else {
+      setIsOpen(true)
+    }
+  }
 
   function onSelectUser() {
     userRef?.current?.focus()
