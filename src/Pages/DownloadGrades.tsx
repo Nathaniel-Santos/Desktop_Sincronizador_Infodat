@@ -15,6 +15,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import SideBar from '@/components/SideBar/SideBar';
 
 import { GetAllNotasExport } from '@/services/DownloadAllGrades';
+import { GetAllConceitosExport } from '@/services/GetAllConceitosExport'
 import { SelectedNotasExport } from '@/services/DownloadSelectedGrades';
 import { GetKeysRecorded } from '@/services/GetKeysRecorded';
 import { GetAllCursosTable } from '@/services/GetAllCursosTable';
@@ -242,8 +243,11 @@ export default function DownloadGrades() {
       const fileDirectory = defaultFilePath !== '' ? defaultFilePath : file
 
       if (checked) {
+        const conceitosResult = GetAllConceitosExport(connection, fileDirectory, optionAllNotasSelect)
         const queryResult = GetAllNotasExport(connection, fileDirectory, optionAllNotasSelect)
+        connection.end()
         console.log('QueryResult: ', queryResult)
+        console.log('ConceitosResult: ', conceitosResult)
       } else {
         SelectedNotasExport(connection, fileDirectory, selectedItems)
       }

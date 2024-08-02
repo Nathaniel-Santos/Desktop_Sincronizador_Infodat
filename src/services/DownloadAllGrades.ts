@@ -1,7 +1,7 @@
 import fs from 'fs'
 const { ipcRenderer } = require('electron')
 
-export function GetAllNotasExport(connection: any, __dirname: string, tipoDownload: string) {
+export async function GetAllNotasExport(connection: any, __dirname: string, tipoDownload: string) {
   let dados: any = []
   let resultado: any = []
   let QtdArquivos: any = 0

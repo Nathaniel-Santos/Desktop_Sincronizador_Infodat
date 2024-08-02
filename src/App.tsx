@@ -124,7 +124,7 @@ const App: React.FC = () => {
 
       if (result.statusCode === 200) {
         ipcRenderer.send('full-info-config-request', { authStatus: 'Waiting' })
-        ipcRenderer.send('notification', { title: 'INFODAT', body: 'Configuração salva com sucesso' })
+        // ipcRenderer.send('notification', { title: 'INFODAT', body: 'Configuração salva com sucesso' })
       } else {
         openModal()
         alert('Não foi possível salvar as alterações')
