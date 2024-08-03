@@ -1,7 +1,7 @@
 import fs from 'fs'
 const { ipcRenderer } = require('electron')
 
-export async function GetAllConceitosExport(connection: any, __dirname: string, tipoDownload: string = '1') {
+export async function GetAllConceitosExport(connection: any, __dirname: string, tipoDownload: string) {
     let dados: any = []
     let resultado: any = []
     let QtdArquivos: any = 0
@@ -36,9 +36,9 @@ export async function GetAllConceitosExport(connection: any, __dirname: string, 
             (err, result) => {
                 if (err) {
                     console.log('Não foi possivel atualizar o campo baixados em conceitos_app')
-                    ipcRenderer.send('notification', { title: 'Infodat', body: 'Não foi possivel atualizar conceitos.' })
+                    // ipcRenderer.send('notification', { title: 'Infodat', body: 'Não foi possivel atualizar conceitos.' })
                 } else {
-                    console.log('Campo atualizado com sucesso')
+                    console.log('Campos atualizado com sucesso')
                 }
             })
     }
@@ -46,27 +46,31 @@ export async function GetAllConceitosExport(connection: any, __dirname: string, 
     const condicional: string = tipoDownload
     let query = ''
 
+    console.log('Condicional Conceitos: ', condicional)
+    
     switch (condicional) {
         case '1':          //Baixar apenas as notas não baixadas
-            query = `SELECT * FROM conceitos_app WHERE conceito IS NOT NULL AND baixado = '0' ORDER BY chave`
-            break
+        query = `SELECT * FROM conceitos_app WHERE conceito IS NOT NULL AND baixado = '0' ORDER BY chave`
+        break
         case '2':          //Baixar todas as notas
-            query = `SELECT * FROM conceitos_app WHERE conceito IS NOT NULL ORDER BY chave`
-            break
+        query = `SELECT * FROM conceitos_app WHERE conceito IS NOT NULL ORDER BY chave`
+        break
         case '3':         //Putaria 
-            query = `SELECT * FROM conceitos_app WHERE data_lanc = '2023-04-04' AND baixado = '1' ORDER BY chave`
-            break
+        query = `SELECT * FROM conceitos_app WHERE data_lanc = '2023-04-04' AND baixado = '1' ORDER BY chave`
+        break
     }
 
+    console.log('query Conceitos: ', query)
+    
     async function GetConceitos() {
-        connection.query(`SELECT * FROM conceitos_app WHERE conceito IS NOT NULL ORDER BY chave`,
+        connection.query(query,
             async (err, result) => {
                 if (err) {
                     console.log(`Erro ao consultar notas `, 'CODE: ', err.code, err)
 
                 } else {
                     dados.push(result)
-                    // res.send(dados)
+                    console.log('Dados: ', dados)
                     const chaves: any = [...new Set(dados[0].map(item => item.chave))]
 
                     for (const key of chaves) {
@@ -84,7 +88,7 @@ export async function GetAllConceitosExport(connection: any, __dirname: string, 
                             }
                             //ARQUIVO ESCRITO COM SUCESSO
                             QtdArquivos += 1
-                            console.log('Arquivo escrito com sucesso', nomeArquivo)
+                            // console.log('Arquivo escrito com sucesso', nomeArquivo)
                         })
 
                     }

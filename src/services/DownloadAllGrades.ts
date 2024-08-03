@@ -198,7 +198,6 @@ export async function GetAllNotasExport(connection: any, __dirname: string, tipo
         }
 
       })
-
   }
   const resultadoNotas = GetNotas(tipoDownload)
   return resultadoNotas

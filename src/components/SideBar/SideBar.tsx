@@ -16,7 +16,7 @@ interface CredentialType {
 
 export default function SideBar() {
   const path = window.location.pathname
-  const [version, setVersion] = useState('1.0.1')
+  const [version, setVersion] = useState('1.0.2')
   const [nomeEscola, setNomeEscola] = useState('')
 
   function onGetInfo() {

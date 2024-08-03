@@ -245,7 +245,6 @@ export default function DownloadGrades() {
       if (checked) {
         const conceitosResult = GetAllConceitosExport(connection, fileDirectory, optionAllNotasSelect)
         const queryResult = GetAllNotasExport(connection, fileDirectory, optionAllNotasSelect)
-        connection.end()
         console.log('QueryResult: ', queryResult)
         console.log('ConceitosResult: ', conceitosResult)
       } else {

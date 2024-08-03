@@ -60,7 +60,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (connFileCreate && count === 0) {
-      count ++
+      count++
       setConnectionEscolas(
         mysql.createPool({
           host: 'mysql247.umbler.com',
@@ -208,8 +208,13 @@ const App: React.FC = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, ease: 'easeIn', delay: 2.3 }}
             >
-              INTEGRAÇÃO NOTAS WEB
+              <p>
+                INTEGRAÇÃO NOTAS WEB
+              </p>
             </motion.p>
+              <p style={{ fontSize: 10, opacity: 0.4 }}>
+                Versão 1.0.2
+              </p>
           </motion.div>
         </AnimatePresence>
 
@@ -327,6 +332,7 @@ const App: React.FC = () => {
           </Backdrop>
 
         </div>
+
 
       </header>
 
