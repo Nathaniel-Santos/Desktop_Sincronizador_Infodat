@@ -91,7 +91,7 @@ async function createWindow() {
       const appName = app.name.toUpperCase()
       app.setAppUserModelId(appName);
     }
-    showNotification(data.title, data.body)
+    // showNotification(data.title, data.body)
     event.sender.send('notification', { Msg: 'Notification fired' })
 
   })
@@ -206,7 +206,7 @@ ipcMain.on('create-config-file', (event, msg) => {
     return
 
   } else {
-    if(msg?.SAVE === true){
+    if (msg?.SAVE === true) {
       writeFile(filePathConfig, JSON.stringify(msg), (err) => {
         if (err) {
           event.sender.send('create-config-file', 'Erro create-config-file:', filePathConfig)
@@ -314,8 +314,6 @@ ipcMain.on('file-database-request', (event, msg) => {
 })
 
 ipcMain.on('file-request', (event, msg) => {
-  console.log('File-Request fired')
-
   const msgData: any = msg
   let getFilePath = ''
   let getFileData: connMsgType
@@ -326,11 +324,9 @@ ipcMain.on('file-request', (event, msg) => {
 
     } else {
       const fileData: connMsgType = JSON.parse(data)
-      console.log('FILE_DATA: ', fileData)
       getFilePath = fileData.downloadPath
       getFileData = fileData
 
-      console.log('getFileData: ', getFileData)
       // const user: string = fileData.FILE_PATH_DOWNLOAD
       // const authMsg = { User: user, Pass: pass, filePath: filePathConfig, data: fileData }
 
@@ -339,28 +335,24 @@ ipcMain.on('file-request', (event, msg) => {
 
   })
 
-  console.log('msgData: ', msgData)
-  const allWindows = BrowserWindow.getAllWindows()
-  console.log('AllWindows: ', allWindows)
+  BrowserWindow.getAllWindows()
 
   if (msgData.auth) {
     dialog.showOpenDialog({
       title: 'PASTA PARA SALVAR AS NOTAS',
-      defaultPath: msg.defaultUrl ? msg.defaultUrl : join(__dirname),
+      defaultPath: msg.defaultUrl ? msg.defaultUrl : join(__dirname), 
       buttonLabel: 'SALVAR',
       // Specifying the File Selector Property
       properties: ['openDirectory']
     }).then(file => {
       // Stating whether dialog operation was cancelled or not.
-      console.log('filePath: ', file)
 
       if (!file.canceled && file.filePaths.length !== 0) {
-        const filepath = file.filePaths[0].toString();
+        const filepath = file.filePaths[0].toString(); 
         event.reply('file', filepath);
       }
 
-      const allWindows = BrowserWindow.getAllWindows()
-      console.log('Allwindows2: ', allWindows)
+      BrowserWindow.getAllWindows()
 
     }).catch(err => {
       console.log('Erro: ', err)
@@ -373,8 +365,9 @@ ipcMain.on('file-request', (event, msg) => {
 app.whenReady().then(() => {
   createWindow()
 })
-
+''
 app.on('window-all-closed', () => {
+  sessionStorage.clear()
   win = null
   if (process.platform !== 'darwin') app.quit()
 })
@@ -397,7 +390,15 @@ app.on('activate', () => {
   }
 })
 
-app.on("error" ,(err) => {
+app.on('exit', () => {
+  console.log('exit has triggered')
+})
+
+app.on('end', () => {
+  console.log('exit has triggered')
+})
+
+app.on("error", (err) => {
   console.log('Error: ', err)
 })
 

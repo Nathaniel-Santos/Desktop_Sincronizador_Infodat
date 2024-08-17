@@ -7,20 +7,12 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Modal from 'react-modal'
 
 import GetStatusSchool from '@/services/GetStatusSchool';
+import { useMysqlConnectionStore } from '@/store/connection'
 
 import { Button, TextField } from '@mui/material';
 import TopBar from '@/components/TopBar/TopBar';
 import SideBar from '@/components/SideBar/SideBar';
-import { Player } from '@lottiefiles/react-lottie-player'
-
-type connMsgType = {
-  Host: string,
-  User: string,
-  Pass: string,
-  Db: string,
-  Port: string,
-  Escola: string
-}
+import { connMsgType } from './Types/ConnectionWeb'
 
 export default function ConnectionWeb() {
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -33,6 +25,7 @@ export default function ConnectionWeb() {
   const [isVisible, setIsVisible] = useState(false)
   const [senhaMostrarDados, setSenhaMostrarDados] = useState('')
   const [typeFields, setTypeFields] = useState('password')
+  const mysqlConnection = useMysqlConnectionStore((state) => state.mysqlConnection)
 
   Modal.setAppElement('#root')
 
@@ -152,27 +145,6 @@ export default function ConnectionWeb() {
           overlayClassName={styles.modalOverlay}
           className={`${styles.modalContent} ${modalIsOpen !== true ? styles.modalClosed : styles.modalOpened}`}
         >
-          {/* <Player
-            keepLastFrame
-            autoplay
-            style={
-              {
-                width: 120,
-                height: 120,
-                color: '#ffffff',
-                marginBottom: '1em',
-                marginTop: '0em',
-                backgroundColor: 'rgba(255,255,255,1)',
-                opacity: 1,
-                borderRadius: '50%',
-                transition: '0.5s',
-                padding: '0.4em'
-              }
-            }
-            src={'https://assets2.lottiefiles.com/packages/lf20_pqnfmone.json'}
-
-          /> */}
-
           <h2>Alterações salvas com sucesso</h2>
           <p>Após retornar para páginas de sincronização favor atualizar a pagina para confirmar os novos dados</p>
           <button onClick={closeModal}>Fechar</button>

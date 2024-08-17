@@ -58,7 +58,6 @@ async function createWindow() {
       const appName = app.name.toUpperCase();
       app.setAppUserModelId(appName);
     }
-    showNotification(data.title, data.body);
     event.sender.send("notification", { Msg: "Notification fired" });
   });
   ipcMain.on("closeApp", () => {
@@ -222,7 +221,6 @@ ipcMain.on("file-database-request", (event, msg) => {
   }
 });
 ipcMain.on("file-request", (event, msg) => {
-  console.log("File-Request fired");
   const msgData = msg;
   let getFilePath = "";
   let getFileData;
@@ -231,15 +229,11 @@ ipcMain.on("file-request", (event, msg) => {
       event.sender.send("credential_error", err);
     } else {
       const fileData = JSON.parse(data);
-      console.log("FILE_DATA: ", fileData);
       getFilePath = fileData.downloadPath;
       getFileData = fileData;
-      console.log("getFileData: ", getFileData);
     }
   });
-  console.log("msgData: ", msgData);
-  const allWindows = BrowserWindow.getAllWindows();
-  console.log("AllWindows: ", allWindows);
+  BrowserWindow.getAllWindows();
   if (msgData.auth) {
     dialog.showOpenDialog({
       title: "PASTA PARA SALVAR AS NOTAS",
@@ -247,13 +241,11 @@ ipcMain.on("file-request", (event, msg) => {
       buttonLabel: "SALVAR",
       properties: ["openDirectory"]
     }).then((file) => {
-      console.log("filePath: ", file);
       if (!file.canceled && file.filePaths.length !== 0) {
         const filepath = file.filePaths[0].toString();
         event.reply("file", filepath);
       }
-      const allWindows2 = BrowserWindow.getAllWindows();
-      console.log("Allwindows2: ", allWindows2);
+      BrowserWindow.getAllWindows();
     }).catch((err) => {
       console.log("Erro: ", err);
       event.sender.send("notification", { Msg: "Diret\xF3rio Inexistente" });
@@ -263,7 +255,9 @@ ipcMain.on("file-request", (event, msg) => {
 app.whenReady().then(() => {
   createWindow();
 });
+"";
 app.on("window-all-closed", () => {
+  sessionStorage.clear();
   win = null;
   if (process.platform !== "darwin")
     app.quit();
@@ -283,6 +277,12 @@ app.on("activate", () => {
   } else {
     createWindow();
   }
+});
+app.on("exit", () => {
+  console.log("exit has triggered");
+});
+app.on("end", () => {
+  console.log("exit has triggered");
 });
 app.on("error", (err) => {
   console.log("Error: ", err);

@@ -120,7 +120,7 @@ export async function GetAllNotasExport(connection: any, __dirname: string, tipo
     return resultUpdate
   }
 
-  function GetNotas(tipoDownload: string) {
+  async function GetNotas(tipoDownload: string) {
     const condicional: string = tipoDownload
     let query = ''
 
@@ -141,63 +141,67 @@ export async function GetAllNotasExport(connection: any, __dirname: string, tipo
     }
 
     console.log('Query: ', query)
+    let dadosReturn:any
 
-    connection.query(query,
-      (err, result) => {
-        if (err) {
-          console.log(`Erro ao consultar notas `, 'CODE: ', err.code, err)
-          return err
-        } else {
-          dados.push(result)
-          // console.log('Result: ', result)
-          // res.send(dados)
-          const chaves: any = [...new Set(dados[0].map(item => item.chave))]
+    const result = await connection.promise().query(query)
+      .then(([result, _]) => {
+        console.log('Result: ', result)
+        dados.push(result)
+        // res.send(dados)
+        const chaves: any = [...new Set(dados[0].map(item => item.chave))]
 
 
-          // console.log('Chaves: ', chaves)
+        // console.log('Chaves: ', chaves)
 
-          if (chaves.length === 0) {
-            ipcRenderer.send('notification', { title: 'Infodat', body: 'Não foi possível encontrar notas.' })
-            return result
-          }
-
-          for (const key of chaves) {
-            const dadosFiltrados = dados[0].filter(item => item.chave === key)
-            resultado = JSON.stringify(dadosFiltrados) // Tirar o textRow
-            resultado = JSON.parse(resultado)
-            const avaliacao = key.slice(7)
-            const nomeArquivo = avaliacao + '0000' + key.slice(0, 7)
-            let resultadoFormatado = Formatar(resultado)
-
-            // console.log('ResultadoFormatado: ', resultadoFormatado)
-
-            fs.writeFile(__dirname + `/Gerados/${nomeArquivo}`, resultadoFormatado, err => {
-              if (err) {
-                console.error('Erro ao tentar escrever arquivo: ', err)
-                return
-              }
-              //ARQUIVO ESCRITO COM SUCESSO
-              QtdArquivos += 1
-              // console.log('Arquivo escrito com sucesso', nomeArquivo)
-
-              if (QtdArquivos === chaves.length) {
-                ipcRenderer.send('notification', { title: 'Infodat', body: 'Download de notas finalizado' })
-                var files = fs.readdirSync(__dirname + `/Gerados`);
-                // console.log('Files: ', files)
-              }
-            })
-
-          }
-          // console.log(QtdArquivos, ' ', chaves.length)
-
-          console.log('------------------- FEITO -----------------------')
-          const resultadoUpdate = updateBaixados()
-          console.log('ResultadoUpdate: ', resultadoUpdate)
-
-
+        if (chaves.length === 0) {
+          ipcRenderer.send('notification', { title: 'Infodat', body: 'Não foi possível encontrar notas.' })
+          return result
         }
 
+        for (const key of chaves) {
+          const dadosFiltrados = dados[0].filter(item => item.chave === key)
+          resultado = JSON.stringify(dadosFiltrados) // Tirar o textRow
+          resultado = JSON.parse(resultado)
+          const avaliacao = key.slice(7)
+          const nomeArquivo = avaliacao + '0000' + key.slice(0, 7)
+          let resultadoFormatado = Formatar(resultado)
+
+          // console.log('ResultadoFormatado: ', resultadoFormatado)
+
+          fs.writeFile(__dirname + `/Gerados/${nomeArquivo}`, resultadoFormatado, err => {
+            if (err) {
+              console.error('Erro ao tentar escrever arquivo: ', err)
+              return
+            }
+            //ARQUIVO ESCRITO COM SUCESSO
+            QtdArquivos += 1
+            // console.log('Arquivo escrito com sucesso', nomeArquivo)
+
+            if (QtdArquivos === chaves.length) {
+              ipcRenderer.send('notification', { title: 'Infodat', body: 'Download de notas finalizado', downloadType: 'grades' })
+              var files = fs.readdirSync(__dirname + `/Gerados`);
+              dadosReturn = { title: 'Infodat', body: 'Download de notas finalizado', downloadType: 'grades' }
+              return dadosReturn// console.log('Files: ', files)
+            }
+          })
+
+        }
+        // console.log(QtdArquivos, ' ', chaves.length)
+
+        console.log('------------------- FEITO -----------------------')
+        const resultadoUpdate = updateBaixados()
+        console.log('ResultadoUpdate: ', resultadoUpdate)
+
+
+
       })
+      .catch((err) => {
+        console.log(`Erro ao consultar notas `, 'CODE: ', err.code, err)
+        return err
+      })
+
+      // console.log('ResultFinal: ', result)
+    // return dadosReturn
   }
   const resultadoNotas = GetNotas(tipoDownload)
   return resultadoNotas

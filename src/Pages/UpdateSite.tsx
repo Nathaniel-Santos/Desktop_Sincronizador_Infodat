@@ -23,20 +23,10 @@ import { GetMdbTableFields } from '@/services/GetMdbTableFields';
 import { ShowWebTablesColumns } from '@/services/ShowWebTablesColumns';
 import WifiIcon from '@mui/icons-material/Wifi';
 import { motion } from 'framer-motion';
+import { useMysqlConnectionStore } from '@/store/connection'
+import { connMsgType, IdadosCheck } from './Types/UpdateSite';
 
-type connMsgType = {
-  USER?: string,
-  PASS?: string,
-  MDBPATH?: string,
-  DOWNLOADPATH?: string
-}
 
-type IdadosCheck = {
-  "checked":boolean,
-  "mdb": string,
-  "sent": boolean,
-  "web": string
-}
 
 export default function UpdateSite() {
 
@@ -68,12 +58,11 @@ export default function UpdateSite() {
   const [pagamentosCheck, setPagamentosCheck] = useState({ web: 'pagamentos', mdb: 'Pagamentos', checked: false })
   const [tiposocorrCheck, setTiposocorrCheck] = useState({ web: 'tiposocorr', mdb: 'TiposOcorr', checked: false })
   const [turmasCheck, setTurmasCheck] = useState({ web: 'turmas', mdb: 'Turmas', checked: false })
+  const connection = useMysqlConnectionStore((state) => state.mysqlConnection)
 
   const [webIsConnected, setWebIsConnected] = useState(false)
   const [sending, setSending] = useState(false)
   const [iconWifiStyle, setIconWifiStyle] = useState(styles.wifiIcon)
-
-  let connection: any = ''
 
   const mdbPwd = '22201034'
 
@@ -154,15 +143,7 @@ export default function UpdateSite() {
   const onHandleConnectWebDb = () => {
     ipcRenderer.send('connection')
 
-    ipcRenderer.on('connection', async (event, msg) => {
-      connection = mysql.createPool({
-        host: msg.Host,
-        user: msg.User,
-        password: msg.Pass,
-        database: msg.Db,
-        port: msg.Port
-      })
-
+    ipcRenderer.on('connection', async (event, msg) => {      
       setWebDbName(msg.Db)
       setWebConnection(connection)
 
@@ -204,7 +185,6 @@ export default function UpdateSite() {
       setDatabasePath(file)
 
       const filePath = join(file, 'INTERNET.MDB')
-      console.log('filePath: ', filePath)
       setMdbFilePath(filePath)
 
       const mdbDatabaseReturn = GetInternetMdbInfo(filePath, mdbPwd)
@@ -227,6 +207,7 @@ export default function UpdateSite() {
 
   function closeModal() {
     setIsOpen(false);
+    connection.end()
     window.location.reload()
   }
 

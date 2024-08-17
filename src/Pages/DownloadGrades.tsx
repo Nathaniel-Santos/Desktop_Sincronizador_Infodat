@@ -1,18 +1,18 @@
-const mysql = require('mysql2')
-
 import styles from '../assets/styles/DownloadGrades/DownloadGrades.module.scss'
 import { useState, useEffect } from 'react'
-import Modal from 'react-modal'
 import { Link } from 'react-router-dom'
 const { ipcRenderer } = require('electron')
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { Autocomplete, Backdrop, Button, Checkbox, TextField } from '@mui/material';
+import { Backdrop, Button } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion'
-import { Player } from '@lottiefiles/react-lottie-player'
+
 import TopBar from '@/components/TopBar/TopBar';
 import CircularProgress from '@mui/material/CircularProgress';
 import SideBar from '@/components/SideBar/SideBar';
+import ModalDownloadSucess from '@/components/ModalDownloadSucess'
+import CardDownloadNotas from '@/components/CardDownloadNotas';
+import CardDownloadFiltro from '@/components/CardDownloadFiltro';
 
 import { GetAllNotasExport } from '@/services/DownloadAllGrades';
 import { GetAllConceitosExport } from '@/services/GetAllConceitosExport'
@@ -20,34 +20,21 @@ import { SelectedNotasExport } from '@/services/DownloadSelectedGrades';
 import { GetKeysRecorded } from '@/services/GetKeysRecorded';
 import { GetAllCursosTable } from '@/services/GetAllCursosTable';
 import { GetAllDisciplinasTable } from '@/services/GetAllDisciplinasTable';
+import { DownloadAllQuaGrades } from '@/services/DownloadAllQuaGrades';
+
 import FilterSelectedItems from '@/functions/FilterSelectedItems';
+import { useMysqlConnectionStore } from '@/store/connection'
 
-interface KeysProps {
-  chave: string
-}
+import { CursosProps, DisciplinasProps, KeysProps, SelectProps } from './Types/DownloadGrades';
 
-interface CursosProps {
-  label: string;
-  Codigo: string;
-}
-
-interface DisciplinasProps {
-  label: string,
-  Codigo: string
-}
-
-interface SelectProps {
-  label: string,
-  Codigo: string
-}
 
 export default function DownloadGrades() {
-
-  const [connection, setConnection] = useState<any>(null)
+  const [mysqlConnection] = useMysqlConnectionStore((state) => [state.mysqlConnection])
 
   const [open, setOpen] = useState<boolean>(false)
   const [modalIsOpen, setIsOpen] = useState<boolean>(false)
   const [checked, setChecked] = useState<boolean>(false)
+  const [checkedQua, setCheckedQua] = useState<boolean>(false)
 
   const [valueCurso, setValueCurso] = useState<string>('')
   const [valueTurma, setValueTurma] = useState<string>('')
@@ -65,6 +52,7 @@ export default function DownloadGrades() {
   const [cursosPermitidos, setCursosPermitidos] = useState<CursosProps[]>([])
   const [disciplinasPermitidas, setDisciplinasPermitidas] = useState<DisciplinasProps[]>([])
   const [optionAllNotasSelect, setOptionAllNotasSelect] = useState<string>('1')
+  const [optionAllNotasQuaSelect, setOptionAllNotasQuaSelect] = useState<'1' | '2' | '3'>('1')
   const [optionSelectNotasConceito, setOptionSelectNotasConceito] = useState<string>('nota')
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(false)
   const [configData, setConfigData] = useState<object | any>({})
@@ -76,23 +64,6 @@ export default function DownloadGrades() {
     },
   });
 
-  //INICIAR CONNEXÃO
-  useEffect(() => {
-    ipcRenderer.send('connection')
-
-    ipcRenderer.on('connection', (event, msg) => {
-      setConnection(
-        mysql.createPool({
-          host: msg.Host,
-          user: msg.User,
-          password: msg.Pass,
-          database: msg.Db,
-          port: msg.Port
-        })
-      )
-    })
-  }, [])
-
   function handleClose() {
     setOpen(!open)
   }
@@ -103,13 +74,14 @@ export default function DownloadGrades() {
 
   function closeModal() {
     setIsOpen(false);
+    window.location.reload()
   }
 
   //FILTRAR CURSOS DENTRO DAS CHAVES
   function filterCursosKeys(keys: KeysProps[]): [String] {
     const cursos = keys.map((item) => {
       const chave = item.chave
-      const curso = chave.slice(0, 3)
+      const curso = chave?.slice(0, 3)
       return curso
     })
     const cursosUnicos: any = [...new Set(cursos)]
@@ -140,7 +112,7 @@ export default function DownloadGrades() {
   function filterDisciplinasKeys(keys: KeysProps[]): [String] {
     const disciplinasKeys = keys.map((item) => {
       const chave = item.chave
-      const disciplina = chave.slice(4, 7)
+      const disciplina = chave?.slice(4, 7)
       return disciplina
     })
     const disciplinasUnicas: any = [...new Set(disciplinasKeys)]
@@ -149,8 +121,6 @@ export default function DownloadGrades() {
 
   //FILTRAR DISCIPLINAS PERMITIDAS
   function filterDisciplinas(disciplinas: DisciplinasProps[], keys: string[] | [String]) {
-    // console.log('FILTER DISC disciplinas', disciplinas)
-    // console.log('FILTER DISC KEYS', keys)
     const filtroDisciplinas = disciplinas.filter(item =>
       keys.includes(item.Codigo) ? item : !item
     )
@@ -162,7 +132,6 @@ export default function DownloadGrades() {
     const disciplionasTable = handleGetAllDisciplinasTable()
     disciplionasTable.then((result) => {
       const permitidos = filterDisciplinas(result, disciplinasKeys)
-      // console.log('ResultDadosDisciplina', result)
       permitidos.push({ label: 'Todos', Codigo: '000' })
       setDisciplinasPermitidas(permitidos)
     })
@@ -171,58 +140,58 @@ export default function DownloadGrades() {
   //FILTRAR TURMAS PERMITIDAS
   function filterTurmas(turmas: any, keys: any) {
     const turmasFiltro = keys.map((item) => {
-      const turma = item.chave.slice(3, 4)
+      const turma = item.chave?.slice(3, 4)
       return turma
     })
     const turmasUnicas = [... new Set(turmasFiltro)]
-  }
-
-  const onSuccessModal = () => {
-    return <Modal
-      closeTimeoutMS={200}
-      isOpen={modalIsOpen}
-      onRequestClose={closeModal}
-      ariaHideApp={false}
-      contentLabel="Example Modal"
-      overlayClassName={styles.modalOverlay}
-      className={`${styles.modalContent} ${modalIsOpen !== true ? styles.modalClosed : styles.modalOpened}`}
-    >
-      {/* <Player
-        keepLastFrame
-        autoplay
-        style={
-          {
-            width: 120,
-            height: 120,
-            color: '#ffffff',
-            marginBottom: '1em',
-            marginTop: '0em',
-            backgroundColor: 'rgba(255,255,255,1)',
-            opacity: 1,
-            borderRadius: '50%',
-            transition: '0.5s',
-            padding: '0.4em'
-          }
-        }
-        src={'https://assets2.lottiefiles.com/packages/lf20_pqnfmone.json'}
-      /> */}
-
-      <h2>Download Finalizado</h2>
-      <p>Para concluir a importação, deverá processar os arquivos baixados no módulo extras</p>
-      <button onClick={closeModal}>Fechar</button>
-    </Modal>
   }
 
   function onChangeCheck() {
     setChecked(!checked)
   }
 
+  function onChangeCheckQua() {
+    setCheckedQua(!checkedQua)
+  }
+
+  const downloadGrades = async (fileDirectory: string, selectedItems: object | any) => {
+    if (checked) {
+      const conceitosResult = await GetAllConceitosExport(mysqlConnection, fileDirectory, optionAllNotasSelect)
+      const queryResult = await GetAllNotasExport(mysqlConnection, fileDirectory, optionAllNotasSelect)
+      console.log('QueryResult: ', queryResult)
+      console.log('ConceitosResult: ', conceitosResult)
+    } 
+
+    console.log('checkedQua: ', checkedQua)
+    if (checkedQua) {
+      console.log('checkedQua1: ', checkedQua)
+      await DownloadAllQuaGrades({
+        cursoSelect: 'todos',
+        turmaSelect: '%',
+        avaliacaoSelect: 'N100',
+        __dirname: fileDirectory,
+        baixadosSelect: optionAllNotasQuaSelect,
+        connection: mysqlConnection
+      })
+    }
+
+    if(!checked && !checkedQua) {
+      SelectedNotasExport(mysqlConnection, fileDirectory, selectedItems)
+    }
+
+    setIsOpen(true)
+    setOpen(false)
+  }
+
   function selectFolder(defaultFilePath: string, msg: object | any, selectedItems: object | any) {
     const filePath = msg.downloadPath
     defaultFilePath = filePath
 
+    let fileDirectory = ''
+
+
     ipcRenderer.send('file-request', { auth: true, page: 'DownloadGrades', defaultUrl: defaultFilePath });
-    ipcRenderer.on('file', (event, file) => {
+    const result = ipcRenderer.once('file', (event, file) => {
 
       console.log('FilePathSelected: ', file)
       setOpen(true)
@@ -233,54 +202,26 @@ export default function DownloadGrades() {
         dadosConfig['SAVE'] = true
 
         console.log('dadosConfigSave: ', dadosConfig)
-
         ipcRenderer.send('save-config-change', dadosConfig)
-        // ipcRenderer.on('save-config-change', (event, msg) => {
-        //   console.log('MsgSave-config: ', msg)
-        // })
       }
 
-      const fileDirectory = defaultFilePath !== '' ? defaultFilePath : file
+      fileDirectory = defaultFilePath !== '' ? defaultFilePath : file
+      console.log('FileDirectory: ', fileDirectory)
+      downloadGrades(fileDirectory, selectedItems)
 
-      if (checked) {
-        const conceitosResult = GetAllConceitosExport(connection, fileDirectory, optionAllNotasSelect)
-        const queryResult = GetAllNotasExport(connection, fileDirectory, optionAllNotasSelect)
-        console.log('QueryResult: ', queryResult)
-        console.log('ConceitosResult: ', conceitosResult)
-      } else {
-        SelectedNotasExport(connection, fileDirectory, selectedItems)
-      }
-
-      setOpen(false)
-
-    });
-
-    ipcRenderer.on('notification', (event, msg) => {
-      setIsOpen(true)
-      setOpen(false)
+      // ipcRenderer.on('notification', (event, msg) => {
+      //   setIsOpen(true)
+      //   setOpen(false)
+      // })
     })
   }
 
-  const onHandleDownload = () => {
-    console.log('HandleDownload')
 
+  const onHandleDownload = async () => {
     setButtonDisabled(true)
 
-    if (checked) {
-      // ipcRenderer.send('connection')
-      // var connection: any
+    if (checked || checkedQua) {
       let defaultFilePath: string
-
-      // ipcRenderer.on('connection', (event, msg) => {
-      //   connection = mysql.createPool({
-      //     host: msg.Host,
-      //     user: msg.User,
-      //     password: msg.Pass,
-      //     database: msg.Db,
-      //     port: msg.Port
-      //   })
-
-      // })
 
       const selectedItems = {
         curso: valueCurso,
@@ -288,7 +229,6 @@ export default function DownloadGrades() {
         disciplina: valueDisciplina,
         avaliacao: valueAvaliacao
       }
-
 
       if (configData.downloadPath) {
         selectFolder(defaultFilePath, configData, selectedItems)
@@ -316,8 +256,13 @@ export default function DownloadGrades() {
   }
 
   const onHandleAllNotasOptions = ({ target }) => {
-    console.log('EventOption: ', target.value)
+    console.log('EventOptionGrades: ', target.value)
     setOptionAllNotasSelect(target.value)
+  }
+
+  const onHandleAllNotasQuaOptions = ({ target }) => {
+    console.log('EventOptionQua: ', target.value)
+    setOptionAllNotasQuaSelect(target.value)
   }
 
   const onHandleOptionNotasConceito = ({ target }) => {
@@ -325,7 +270,7 @@ export default function DownloadGrades() {
   }
 
   function handleGetAllCursos() {
-    const cursos = GetAllCursosTable(connection)
+    const cursos = GetAllCursosTable(mysqlConnection)
     cursos
       .then((result) => {
         setCursos(item => item = result)
@@ -337,7 +282,7 @@ export default function DownloadGrades() {
   }
 
   function handleGetAllDisciplinasTable() {
-    const disciplinasQuery = GetAllDisciplinasTable(connection)
+    const disciplinasQuery = GetAllDisciplinasTable(mysqlConnection)
     disciplinasQuery
       .then((result) => {
         setDisciplinas(item => item = result)
@@ -350,7 +295,7 @@ export default function DownloadGrades() {
   }
 
   function handleGetKeysRecorded(): any {
-    const chaves = GetKeysRecorded(connection)
+    const chaves = GetKeysRecorded(mysqlConnection)
     chaves
       .then((result) => {
         const chavesUnicasCursos: any = filterCursosKeys(result)
@@ -368,12 +313,12 @@ export default function DownloadGrades() {
   }
 
   useEffect(() => {
-    if (connection !== null) {
+    if (mysqlConnection !== null && mysqlConnection !== undefined && mysqlConnection.length !== 0) {
       handleGetKeysRecorded()
     } else {
-      console.log('Conexão ainda não foi estabelecida: ', connection)
+      console.log('Conexão ainda não foi estabelecida: ', mysqlConnection)
     }
-  }, [connection])
+  }, [mysqlConnection])
 
   useEffect(() => {
     if (cursosKeys.length !== 0) {
@@ -421,96 +366,38 @@ export default function DownloadGrades() {
             <motion.div layout className={styles.homeRightSide}>
               {/* <h2>BAIXAR NOTAS</h2> */}
 
-              <motion.span
-                key={"TodasAsNotasContainer"}
-                animate={{height: 'auto'}}
-                transition={{ duration: 0.5, ease: 'easeIn', bounce: false }}
-                style={{ marginTop: '-1em' }}
-                className={`${styles.checkContainer} ${checked ? styles.checkContainerSelected : ''}`}>
-                <motion.div layout className={styles.todasAsNotasRow}>
-                  <label>TODAS AS NOTAS</label>
-                  <Checkbox checked={checked} onChange={onChangeCheck} />
-                </motion.div>
+              <motion.div>
+                <CardDownloadNotas
+                  checked={checked}
+                  title="TODAS AS NOTAS"
+                  onChangeCheck={onChangeCheck}
+                  onHandleAllNotasOptions={onHandleAllNotasOptions}
+                  optionAllNotasSelect={optionAllNotasSelect} />
 
-                {
-                  checked ?
-                    <motion.div
-                      initial={{opacity: 0}}
-                      animate={{opacity: 1}}
-                      transition={{ duration: 0.5, ease: 'easeIn', bounce: false }}
-                    >
-                      <select className={styles.selectTipoNotas} name="selectAllNotasOption" id="selectAllNotasOption" onChange={onHandleAllNotasOptions} value={optionAllNotasSelect}>
-                        <option value={'1'}>1 - APENAS NÃO BAIXADAS </option>
-                        <option value={'2'}>2 - TODAS</option>
-                      </select>
-
-                      {/* <label style={{fontSize: '12px', fontWeight: 'normal'}}>TIPO:</label>
-
-                    <select className={styles.selectNotasConceito} name="selectAllNotasOption" id="selectAllNotasOption" onChange={onHandleOptionNotasConceito} value={optionSelectNotasConceito}>
-                      <option value={'nota'}>NOTA</option>
-                      <option value={'conceito'}>CONCEITO</option>
-                    </select> */}
-                    </motion.div>
-                    :
-                    <></>
-                }
-              </motion.span>
-
-              <motion.div
-                // style={{ display: 'none' }}
-                layout
-                className={`${styles.autoCompleteContainer} ${checked ? '' : styles.checkContainerSelected}`}>
-                <label className={styles.filtrarLabel}>FILTRAR</label>
-
-                {valueKeys}
-
-                <Autocomplete
-                  disablePortal
-                  className={styles.autoComplete}
-                  disabled={checked}
-                  id="Curso"
-                  options={cursosPermitidos}
-
-                  onChange={onChangeCurso}
-                  sx={{ width: 300 }}
-                  renderInput={(params) => <TextField {...params} label="CURSO" />}
-                />
-
-                <Autocomplete
-                  disablePortal
-                  disabled={checked}
-                  className={styles.autoComplete}
-                  id="Disciplina"
-                  onChange={onChangeDisciplina}
-                  options={disciplinasPermitidas}
-                  sx={{ width: 300 }}
-                  renderInput={(params) => <TextField {...params} label="DISCIPLINA" />}
-                />
-
-                <Autocomplete
-                  disablePortal
-                  disabled={checked}
-                  className={styles.autoComplete}
-                  onChange={onChangeTurma}
-                  id="Turma"
-                  options={['A', 'B', 'C']}
-                  sx={{ width: 300 }}
-                  renderInput={(params) => <TextField {...params} label="TURMA" />}
-                />
-
-                <Autocomplete
-                  disablePortal
-                  disabled={checked}
-                  className={styles.autoComplete}
-                  onChange={onChangeAvaliacao}
-                  id="Avaliacao"
-                  options={['1° AV', '2° AV', '3° AV', '4° AV']}
-                  sx={{ width: 300 }}
-                  renderInput={(params) => <TextField {...params} label="AVALIAÇÃO" />}
-                />
+                <CardDownloadNotas
+                  checked={checkedQua}
+                  title="N. QUALITATIVAS"
+                  onChangeCheck={onChangeCheckQua}
+                  onHandleAllNotasOptions={onHandleAllNotasQuaOptions}
+                  optionAllNotasSelect={optionAllNotasQuaSelect} />
               </motion.div>
 
-              {modalIsOpen ? onSuccessModal() : null}
+
+
+              <CardDownloadFiltro
+                checked={checked}
+                checkedQua={checkedQua}
+                cursosPermitidos={cursosPermitidos}
+                disciplinasPermitidas={disciplinasPermitidas}
+                onChangeAvaliacao={onChangeAvaliacao}
+                onChangeCheck={onChangeCheck}
+                onChangeCurso={onChangeCurso}
+                onChangeDisciplina={onChangeDisciplina}
+                onChangeTurma={onChangeTurma}
+                valueKeys={valueKeys}
+              />
+
+              {modalIsOpen ? <ModalDownloadSucess closeModal={closeModal} modalIsOpen={modalIsOpen} /> : null}
 
               <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

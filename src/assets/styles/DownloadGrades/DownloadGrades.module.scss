@@ -103,6 +103,7 @@ body {
 
     .autoCompleteContainer {
       display: flex;
+      flex: 1;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -111,6 +112,8 @@ body {
       border-radius: 5px;
       padding: 1em 1em 2em 1em;
       color: #e0eef8a9;
+      max-height: 300px;
+      
 
       .autoComplete {
         margin-bottom: 0.5em;
@@ -162,10 +165,21 @@ body {
     }
 
     .checkContainerSelected {
+      display: flex;
+      flex: 1;
       background-color: #3d4352;
       border: 1px solid #4b5567;
       color: #e0eef8;
       transition: 0.2s;
+      max-height: 300px;
+    }
+
+    .checkContainerDisabled {
+      display: flex;
+      flex: 1;      
+      transition: 0.2s;
+      max-height: 120px;
+      margin-top: 20px;
     }
   }
 

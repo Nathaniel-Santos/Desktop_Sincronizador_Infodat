@@ -70,11 +70,11 @@ export function SelectedNotasExport(connection: any, __dirname: string, items: i
 
   //FILTRA CHAVES PARA AS OPÇÕES INFORMADAS PELO USUÁRIO
   function filterItems(dataKeys: [keysType]):object {
-    const keysFiltered = dataKeys.filter((d, i) => {
-      let curso = d.chave.slice(0, 3)
-      let turma = d.chave.slice(3, 4)
-      let disciplina = d.chave.slice(4, 7)
-      let avaliacao = d.chave.slice(7, 11)
+    const keysFiltered = dataKeys?.filter((d, i) => {
+      let curso = d.chave?.slice(0, 3)
+      let turma = d.chave?.slice(3, 4)
+      let disciplina = d.chave?.slice(4, 7)
+      let avaliacao = d.chave?.slice(7, 11)
 
       return (
         (cursoSelect !== '' ? curso === cursoSelect : curso) &&
@@ -97,7 +97,7 @@ export function SelectedNotasExport(connection: any, __dirname: string, items: i
           dados.push(result)
           dados = filterItems(dados)
 
-          const chaves = [...new Set(dados[0].map((item: { chave: any }) => item.chave))]
+          const chaves = [...new Set(dados[0]?.map((item: { chave: any }) => item.chave))]
           console.log('Chaves:', chaves)
 
           let key: any

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import styles from '../assets/styles/Home/home.module.scss'
@@ -7,17 +7,12 @@ import SideBar from '@/components/SideBar/SideBar';
 
 
 const Home: React.FC = () => {
-  const [open, setOpen] = useState(false)
 
   const darkTheme = createTheme({
     palette: {
       mode: 'dark',
     },
   });
-
-  function handleClose() {
-    setOpen(!open)
-  }
 
   return (
     <ThemeProvider theme={darkTheme}>

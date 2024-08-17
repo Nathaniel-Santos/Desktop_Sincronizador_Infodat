@@ -4,6 +4,7 @@ import { SideBarData } from './SideBarData'
 import ExitToApp from '@mui/icons-material/ExitToApp';
 import { Link, Redirect } from 'react-router-dom';
 import { ipcRenderer } from 'electron';
+import {useMysqlConnectionStore} from '@/store/connection'
 
 interface CredentialType {
   User: string;
@@ -18,15 +19,30 @@ export default function SideBar() {
   const path = window.location.pathname
   const [version, setVersion] = useState('1.0.2')
   const [nomeEscola, setNomeEscola] = useState('')
+  const [mysqlConnection, revalidateConnection] = useMysqlConnectionStore((state) => [state.mysqlConnection, state.onRevalidateConnection])
 
   function onGetInfo() {
     ipcRenderer.send('full-info-config-request', { authStatus: 'Waiting' })
   }
 
   ipcRenderer.on('full-info-config-response', (event, msg: CredentialType) => {
-    console.log('fileDataFullInfo', msg)
     setNomeEscola(msg.Escola)
   })
+
+
+
+  const onLogout = () => {
+    mysqlConnection.end()
+    sessionStorage.clear()
+    // setMysqlConnection([])
+  }
+
+  //Revalidate Connection
+  useEffect(() => {
+    if (mysqlConnection.length === 0) {
+      revalidateConnection()
+    } 
+  }, [mysqlConnection])
 
   useEffect( () => {
     onGetInfo()
@@ -73,8 +89,8 @@ export default function SideBar() {
 
       <div className={styles.SairButtonSideBarAdmin}>
         <Link className={styles.SairButtonSideBarAdmin} to="/">
-          <button  >
-            <ExitToApp className={styles.SideBarExitIcon} />
+          <button onClick={onLogout} >
+            <ExitToApp className={styles.SideBarExitIcon}  />
             SAIR
           </button>
         </Link>
