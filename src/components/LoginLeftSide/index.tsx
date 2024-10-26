@@ -34,7 +34,7 @@ export default function LoginLeftSide() {
               </p>
             </motion.p>
             <p style={{ fontSize: 10, opacity: 0.4 }}>
-              Versão 1.0.2
+              Versão 1.0.3
             </p>
           </motion.div>
         </AnimatePresence>

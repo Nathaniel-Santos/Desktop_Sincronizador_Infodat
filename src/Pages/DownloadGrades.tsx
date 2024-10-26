@@ -17,15 +17,10 @@ import CardDownloadFiltro from '@/components/CardDownloadFiltro';
 import { GetAllNotasExport } from '@/services/DownloadAllGrades';
 import { GetAllConceitosExport } from '@/services/GetAllConceitosExport'
 import { SelectedNotasExport } from '@/services/DownloadSelectedGrades';
-import { GetKeysRecorded } from '@/services/GetKeysRecorded';
-import { GetAllCursosTable } from '@/services/GetAllCursosTable';
-import { GetAllDisciplinasTable } from '@/services/GetAllDisciplinasTable';
 import { DownloadAllQuaGrades } from '@/services/DownloadAllQuaGrades';
 
-import FilterSelectedItems from '@/functions/FilterSelectedItems';
 import { useMysqlConnectionStore } from '@/store/connection'
-
-import { CursosProps, DisciplinasProps, KeysProps, SelectProps } from './Types/DownloadGrades';
+import { CursosProps, DisciplinasProps } from './Types/DownloadGrades';
 
 
 export default function DownloadGrades() {
@@ -75,76 +70,7 @@ export default function DownloadGrades() {
   function closeModal() {
     setIsOpen(false);
     window.location.reload()
-  }
-
-  //FILTRAR CURSOS DENTRO DAS CHAVES
-  function filterCursosKeys(keys: KeysProps[]): [String] {
-    const cursos = keys.map((item) => {
-      const chave = item.chave
-      const curso = chave?.slice(0, 3)
-      return curso
-    })
-    const cursosUnicos: any = [...new Set(cursos)]
-    return cursosUnicos
-  }
-
-  //FILTRAR CURSOS PERMITIDOS
-  function filterCursos(cursos: CursosProps[], keys: string[]): CursosProps[] {
-    const filtroCursos = cursos.filter(item =>
-      keys.includes(item.Codigo) ? item : !item
-    )
-    return filtroCursos
-  }
-
-  function processarDadosCursos() {
-    const cursosTable = handleGetAllCursos()
-    cursosTable.then((result) => {
-      const permitidos = filterCursos(result, cursosKeys)
-      permitidos.push({ label: 'Todos', Codigo: '000' })
-      setCursosPermitidos(permitidos)
-    })
-      .catch((e) => {
-        console.log('Erro em cursosTable: ', e)
-      })
-  }
-
-  //FILTRAR DISCIPLINAS DENTRO DAS CHAVES
-  function filterDisciplinasKeys(keys: KeysProps[]): [String] {
-    const disciplinasKeys = keys.map((item) => {
-      const chave = item.chave
-      const disciplina = chave?.slice(4, 7)
-      return disciplina
-    })
-    const disciplinasUnicas: any = [...new Set(disciplinasKeys)]
-    return disciplinasUnicas
-  }
-
-  //FILTRAR DISCIPLINAS PERMITIDAS
-  function filterDisciplinas(disciplinas: DisciplinasProps[], keys: string[] | [String]) {
-    const filtroDisciplinas = disciplinas.filter(item =>
-      keys.includes(item.Codigo) ? item : !item
-    )
-    return filtroDisciplinas
-  }
-
-  //PROCESSAR DADOS DISCIPLINAS E ARMAZENAR NA
-  function processarDadosDisciplinas() {
-    const disciplionasTable = handleGetAllDisciplinasTable()
-    disciplionasTable.then((result) => {
-      const permitidos = filterDisciplinas(result, disciplinasKeys)
-      permitidos.push({ label: 'Todos', Codigo: '000' })
-      setDisciplinasPermitidas(permitidos)
-    })
-  }
-
-  //FILTRAR TURMAS PERMITIDAS
-  function filterTurmas(turmas: any, keys: any) {
-    const turmasFiltro = keys.map((item) => {
-      const turma = item.chave?.slice(3, 4)
-      return turma
-    })
-    const turmasUnicas = [... new Set(turmasFiltro)]
-  }
+  }  
 
   function onChangeCheck() {
     setChecked(!checked)
@@ -265,93 +191,6 @@ export default function DownloadGrades() {
     setOptionAllNotasQuaSelect(target.value)
   }
 
-  const onHandleOptionNotasConceito = ({ target }) => {
-    setOptionSelectNotasConceito(target.value)
-  }
-
-  function handleGetAllCursos() {
-    const cursos = GetAllCursosTable(mysqlConnection)
-    cursos
-      .then((result) => {
-        setCursos(item => item = result)
-      })
-      .catch((e) => {
-        console.log('Erro chave: ', e)
-      })
-    return cursos
-  }
-
-  function handleGetAllDisciplinasTable() {
-    const disciplinasQuery = GetAllDisciplinasTable(mysqlConnection)
-    disciplinasQuery
-      .then((result) => {
-        setDisciplinas(item => item = result)
-      })
-      .catch((e) => {
-        console.log('Erro ao consultar disciplinas: ', e)
-      })
-
-    return disciplinasQuery
-  }
-
-  function handleGetKeysRecorded(): any {
-    const chaves = GetKeysRecorded(mysqlConnection)
-    chaves
-      .then((result) => {
-        const chavesUnicasCursos: any = filterCursosKeys(result)
-        const chavesUnicasDisciplinas: any = filterDisciplinasKeys(result)
-
-        setKeys(result)
-        setCursosKeys(item => item = chavesUnicasCursos)
-        setDisciplinasKeys(item => item = chavesUnicasDisciplinas)
-      })
-      .catch((e) => {
-        console.log('Erro chave: ', e)
-      })
-
-    return chaves
-  }
-
-  useEffect(() => {
-    if (mysqlConnection !== null && mysqlConnection !== undefined && mysqlConnection.length !== 0) {
-      handleGetKeysRecorded()
-    } else {
-      console.log('Conexão ainda não foi estabelecida: ', mysqlConnection)
-    }
-  }, [mysqlConnection])
-
-  useEffect(() => {
-    if (cursosKeys.length !== 0) {
-      processarDadosCursos()
-      processarDadosDisciplinas()
-    }
-  }, [cursosKeys])
-
-  function onChangeCurso(event: any, value: SelectProps) {
-    const resultFiltro = FilterSelectedItems(keys, value.Codigo, valueDisciplina, valueTurma, valueAvaliacao)
-
-    const disciplinasKeysFilter = filterDisciplinasKeys(resultFiltro)
-    const disciplinasFilter = filterDisciplinas(disciplinas, disciplinasKeysFilter)
-    setDisciplinasPermitidas(disciplinasFilter)
-
-    setKeysFilter(resultFiltro)
-    setValueCurso(v => v = value.Codigo)
-  }
-
-  function onChangeDisciplina(event: any, value: SelectProps) {
-    setValueDisciplina(v => v = value?.Codigo)
-  }
-
-  function onChangeTurma(event: any, value: string) {
-    console.log('Value: ', value)
-    setValueTurma(value)
-  }
-
-  function onChangeAvaliacao(event: any, value: string) {
-    setValueAvaliacao(value)
-    console.log('Avaliacao: ', value)
-  }
-
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -389,12 +228,25 @@ export default function DownloadGrades() {
                 checkedQua={checkedQua}
                 cursosPermitidos={cursosPermitidos}
                 disciplinasPermitidas={disciplinasPermitidas}
-                onChangeAvaliacao={onChangeAvaliacao}
+                setValueAvaliacao={setValueAvaliacao}
                 onChangeCheck={onChangeCheck}
-                onChangeCurso={onChangeCurso}
-                onChangeDisciplina={onChangeDisciplina}
-                onChangeTurma={onChangeTurma}
                 valueKeys={valueKeys}
+                cursosKeys={cursosKeys}
+                disciplinasKeys={disciplinasKeys}
+                valueDisciplina={valueDisciplina}
+                valueTurma={valueTurma}
+                valueAvaliacao={valueAvaliacao}
+                valueCurso={valueCurso}
+                keys={keys}
+                keysFilter={keysFilter}
+                setDisciplinasPermitidas={setDisciplinasPermitidas}
+                setKeysFilter={setKeysFilter}
+                setKeys={setKeys}
+                setDisciplinasKeys={setDisciplinasKeys}
+                setCursosKeys={setCursosKeys}
+                setDisciplinas={setDisciplinas}
+                setTurmas={setTurmas}
+                setCursos={setCursos}
               />
 
               {modalIsOpen ? <ModalDownloadSucess closeModal={closeModal} modalIsOpen={modalIsOpen} /> : null}

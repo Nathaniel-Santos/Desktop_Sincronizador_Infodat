@@ -12,7 +12,7 @@ export async function InsertWebDbTable(connection: any, tableName: string, table
 
   switch (tableName) {
     case 'alunos':
-      tableFieldsQUery = 'Matricula,Curso,Turma,NumDiario,Nome,Endereco,Complemento,Bairro,Cidade,Estado,Cep,Fone,Celular,Sexo,Email,Rematricula,IR,Identidade,Nascimento,Naturalidade,Nacionalidade,SenhaInternet,PaiNome,PaiFone,PaiCelular,PaiEMail,MaeNome,MaeFone,MaeCelular,MaeEmail,ResponsavelNome,ResponsavelCPF,ResponsavelFone,ResponsavelCelular,ResponsavelEmail,Situacao'
+      tableFieldsQUery = 'Matricula,Curso,Turma,NumDiario,Nome,Endereco,Complemento,Bairro,Cidade,Estado,Cep,Fone,Celular,Sexo,Email,Rematricula,IR,Identidade,Nascimento,Naturalidade,Nacionalidade,SenhaInternet,PaiNome,PaiFone,PaiCelular,PaiCpf,PaiEMail,MaeNome,MaeFone,MaeCelular,MaeCpf,MaeEmail,ResponsavelNome,ResponsavelEndereco,ResponsavelComplemento,ResponsavelBairro,ResponsavelCidade,ResponsavelEstado,ResponsavelCep,ResponsavelCPF,ResponsavelFone,ResponsavelCelular,ResponsavelEmail,Situacao'
       break
     case 'digitacao':
       tableFieldsQUery = 'CodFuncionario,CodDisciplina,CodCurso,Turma,Auxiliar'
