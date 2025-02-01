@@ -94,7 +94,7 @@ export default function DownloadGrades() {
       await DownloadAllQuaGrades({
         cursoSelect: 'todos',
         turmaSelect: '%',
-        avaliacaoSelect: 'N100',
+        avaliacaoSelect: 'N400',
         __dirname: fileDirectory,
         baixadosSelect: optionAllNotasQuaSelect,
         connection: mysqlConnection

@@ -58,7 +58,7 @@ const App: React.FC = () => {
           user: 'escolas',
           password: '(J76E|bD6n',
           database: 'escolas',
-          port: '41890'
+          port: '41890',
         })
       )
     }
@@ -69,6 +69,7 @@ const App: React.FC = () => {
     if (connection !== false) {
       setMysqlConnection(connection)
 
+      // console.log('connection: ', connection)
       GetStatusSchool(connection)
         .then((result) => {
           setStatus(result[0].Status)
@@ -89,10 +90,19 @@ const App: React.FC = () => {
   }
 
   const saveConnection = (host: string, db_name: string, user: string, pass: string, port: string | number) => {
+
     if (host) {
       const connObj = { host: host, user: user, password: pass, database: db_name, port: port }
       sessionStorage.setItem('conn', JSON.stringify(connObj))
-      const conn = mysql.createPool({ host: host, user: user, password: pass, database: db_name, port: port })
+      const conn = mysql.createPool(
+        {
+          host: host,
+          user: user,
+          password: pass,
+          database: db_name,
+          port: port
+        }
+      )
       setConnection(conn)
       useSetConnection(conn)
       return 'connectado'

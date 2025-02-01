@@ -142,8 +142,10 @@ export default function UpdateSite() {
 
   const onHandleConnectWebDb = () => {
     ipcRenderer.send('connection')
-
+    
     ipcRenderer.on('connection', async (event, msg) => {      
+      // console.log('CONNECTION: ', msg.Data)
+      ipcRenderer.send('clearAndUpdateDatabase', { conn: msg.Data})
       setWebDbName(msg.Db)
       setWebConnection(connection)
 

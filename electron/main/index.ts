@@ -6,6 +6,7 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 
 const { writeFile, writeFileSync } = require('original-fs')
+import { ProcessUpdateDbYearWithBackup } from '../utils/GenerateBackupAndDeleteDb';
 import { release } from 'os'
 import path, { join } from 'path'
 const urlName = require('url')
@@ -75,10 +76,10 @@ async function createWindow() {
     }))
   } else {
     win.loadURL(url)
-
+    
+    win.webContents.openDevTools()
     // const indexHtml = join(process.env.DIST, 'index.html')
     // win.loadURL(indexHtml)
-    win.webContents.openDevTools()
   }
 
   function showNotification(title, body) {
@@ -278,6 +279,20 @@ ipcMain.on('connection', (event, msg) => {
   })
 })
 
+ipcMain.on('clearAndUpdateDatabase', async (event, msg) => {
+  console.log('CONN: ', msg.conn)
+  const connection = msg.conn
+  const dbConfig = {
+    host: connection.Host,
+    port: connection.Port,
+    user: connection.User,
+    password: connection.Pass,
+    database: connection.Db,
+    multipleStatements: true
+  }
+  await ProcessUpdateDbYearWithBackup(dbConfig)
+})
+
 ipcMain.on('saveConn', (event, msg: any) => {
   const msgData: any = msg
 
@@ -340,7 +355,7 @@ ipcMain.on('file-request', (event, msg) => {
   if (msgData.auth) {
     dialog.showOpenDialog({
       title: 'PASTA PARA SALVAR AS NOTAS',
-      defaultPath: msg.defaultUrl ? msg.defaultUrl : join(__dirname), 
+      defaultPath: msg.defaultUrl ? msg.defaultUrl : join(__dirname),
       buttonLabel: 'SALVAR',
       // Specifying the File Selector Property
       properties: ['openDirectory']
@@ -348,7 +363,7 @@ ipcMain.on('file-request', (event, msg) => {
       // Stating whether dialog operation was cancelled or not.
 
       if (!file.canceled && file.filePaths.length !== 0) {
-        const filepath = file.filePaths[0].toString(); 
+        const filepath = file.filePaths[0].toString();
         event.reply('file', filepath);
       }
 
@@ -365,7 +380,7 @@ ipcMain.on('file-request', (event, msg) => {
 app.whenReady().then(() => {
   createWindow()
 })
-''
+
 app.on('window-all-closed', () => {
   sessionStorage.clear()
   win = null
@@ -388,18 +403,6 @@ app.on('activate', () => {
   } else {
     createWindow()
   }
-})
-
-app.on('exit', () => {
-  console.log('exit has triggered')
-})
-
-app.on('end', () => {
-  console.log('exit has triggered')
-})
-
-app.on("error", (err) => {
-  console.log('Error: ', err)
 })
 
 process.on('uncaughtException', function (err) {

@@ -1,3 +1,4 @@
+var import_GenerateBackupAndDeleteDb = require("../utils/GenerateBackupAndDeleteDb");
 var import_os = require("os");
 var import_path = require("path");
 const { app, BrowserWindow, shell, ipcMain, dialog, Notification, globalShortcut } = require("electron");
@@ -192,6 +193,19 @@ ipcMain.on("connection", (event, msg) => {
     }
   });
 });
+ipcMain.on("clearAndUpdateDatabase", async (event, msg) => {
+  console.log("CONN: ", msg.conn);
+  const connection = msg.conn;
+  const dbConfig = {
+    host: connection.Host,
+    port: connection.Port,
+    user: connection.User,
+    password: connection.Pass,
+    database: connection.Db,
+    multipleStatements: true
+  };
+  await (0, import_GenerateBackupAndDeleteDb.ProcessUpdateDbYearWithBackup)(dbConfig);
+});
 ipcMain.on("saveConn", (event, msg) => {
   const msgData = msg;
   fs.writeFile(filePathConn, msgData, (err, data) => {
@@ -255,7 +269,6 @@ ipcMain.on("file-request", (event, msg) => {
 app.whenReady().then(() => {
   createWindow();
 });
-"";
 app.on("window-all-closed", () => {
   sessionStorage.clear();
   win = null;
@@ -277,15 +290,6 @@ app.on("activate", () => {
   } else {
     createWindow();
   }
-});
-app.on("exit", () => {
-  console.log("exit has triggered");
-});
-app.on("end", () => {
-  console.log("exit has triggered");
-});
-app.on("error", (err) => {
-  console.log("Error: ", err);
 });
 process.on("uncaughtException", function(err) {
   console.log("Erro UncaughtException: ", err);

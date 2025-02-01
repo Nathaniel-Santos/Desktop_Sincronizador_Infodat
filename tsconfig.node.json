@@ -6,5 +6,6 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["package.json", "electron"]
+  "include": ["package.json", "electron", "../../src/services/*.ts"],
+  "files": ["./src/services/GenereteBackupAndDeleteDb.ts"]
 }
